@@ -1,9 +1,8 @@
 import os
 import re
 import shutil
-import zipfile
 import sys
-
+import zipfile
 
 def normalize(name):
     translit_dict = {
