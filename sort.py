@@ -2,15 +2,8 @@ import os
 import re
 import shutil
 import zipfile
+import sys
 
-
-"""
-Функція normalize(name)
-Призначення: Нормалізує рядок name, замінюючи кириличні символи на їх латинські еквіваленти та замінює всі символи, крім латинських літер та цифр, на "_".
-Параметри:
-name (строка): Рядок, який потрібно нормалізувати.
-Повертає: Нормалізований рядок.
-"""
 
 def normalize(name):
     translit_dict = {
@@ -38,14 +31,6 @@ def normalize(name):
     return name
 
 
-"""
-Функція move_files(source, destination)
-Призначення: Переміщує всі файли з директорії source до директорії destination.
-Параметри:
-source (строка): Шлях до директорії, з якої потрібно перемістити файли.
-destination (строка): Шлях до директорії, в яку потрібно перемістити файли.
-"""
-
 def move_files(source, destination):
     for root, dirs, files in os.walk(source):
         for file in files:
@@ -54,12 +39,6 @@ def move_files(source, destination):
             shutil.move(file_path, destination_path)
 
 
-"""
-Функція remove_empty_folders(folder)
-Призначення: Видаляє всі порожні папки в директорії folder.
-Параметри:
-folder (строка): Шлях до директорії, в якій потрібно видалити порожні папки.
-"""
 
 def remove_empty_folders(folder):
     for root, dirs, files in os.walk(folder, topdown=False):
@@ -68,14 +47,6 @@ def remove_empty_folders(folder):
             if not os.listdir(dir_path):
                 os.rmdir(dir_path)
 
-
-"""
-Функція scan_folder(folder_path)
-Призначення: Сканує вміст директорії folder_path та класифікує файли за типами, використовуючи задані розширення.
-Параметри:
-folder_path (строка): Шлях до директорії, яку потрібно просканувати.
-Повертає: Словник, що містить файли, впорядковані за типами, та список невідомих розширень.
-"""
 
 def scan_folder(folder_path):
     file_types = {
@@ -123,14 +94,6 @@ def scan_folder(folder_path):
     return files_by_type, unknown_extensions
 
 
-"""
-Функція organize_files(files, destination_path)
-Призначення: Організовує файли, переміщуючи їх до відповідних папок в destination_path на основі класифікації, здійсненої функцією scan_folder().
-Параметри:
-files (словник): Словник, що містить файли, впорядковані за типами.
-destination_path (строка): Шлях до директорії, в яку потрібно перемістити файли.
-"""
-
 def organize_files(files, destination_path):
     for category, file_list in files.items():
         category_path = os.path.join(destination_path, category)
@@ -156,21 +119,17 @@ def organize_files(files, destination_path):
                 shutil.move(file_path, new_file_path)
 
 
-try:
-    folder_path = input("Enter the folder path: ")
-    destination_path = folder_path
-    files, unknown_extensions = scan_folder(folder_path)
+folder_path = sys.argv[1]
+destination_path = folder_path
+files, unknown_extensions = scan_folder(folder_path)
 
-    move_files(folder_path, destination_path)
-    remove_empty_folders(folder_path)
-    organize_files(files, destination_path)
+move_files(folder_path, destination_path)
+remove_empty_folders(folder_path)
+organize_files(files, destination_path)
 
-    print("List of files by type:")
-    for category, file_list in files.items():
-        print(f"{category}: {', '.join(file_list)}")
+print("List of files by type:")
+for category, file_list in files.items():
+    print(f"{category}: {', '.join(file_list)}")
 
-    print("Unknown extensions:")
-    print(', '.join(unknown_extensions))
-
-except FileNotFoundError as error:
-    print(f"Error: {error}")
+print("Unknown extensions:")
+print(', '.join(unknown_extensions))
