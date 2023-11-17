@@ -48,11 +48,11 @@ def remove_empty_folders(folder):
 
 def scan_folder(folder_path):
     file_types = {
-        'images': ['jpeg', 'png', 'jpg', 'svg', 'bmp'],
-        'videos': ['avi', 'mp4', 'mov', 'mkv'],
-        'documents': ['doc', 'docx', 'txt', 'pdf', 'xls', 'xlsx', 'pptx'],
-        'music': ['mp3', 'ogg', 'wav', 'amr'],
-        'archives': ['zip', 'gz', 'tar']
+        'images': ['jpeg', 'png', 'jpg', 'svg', 'bmp', 'JPEG', 'PNG', 'JPG', 'SVG', 'BMP'],
+        'videos': ['avi', 'mp4', 'mov', 'mkv', 'AVI', 'MP4', 'MOV', 'MKV'],
+        'documents': ['doc', 'docx', 'txt', 'pdf', 'xls', 'xlsx', 'pptx', 'DOC', 'DOCX', 'TXT', 'PDF', 'XLS', 'XLSX', 'PPTX'],
+        'music': ['mp3', 'ogg', 'wav', 'amr', 'MP3', 'OGG', 'WAV', 'AMR'],
+        'archives': ['zip', 'gz', 'tar', 'ZIP', 'GZ', 'TAR']
     }
 
     files_by_type = {category: [] for category in file_types}
