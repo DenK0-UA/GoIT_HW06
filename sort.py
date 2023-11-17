@@ -66,7 +66,7 @@ def scan_folder(folder_path):
             added_to_category = False
 
             for category, extensions in file_types.items():
-                if extension in extensions:
+                if extension.lower() in extensions:
                     normalized_name = normalize(item.split('.')[0]) + '.' + extension
                     new_item_path = os.path.join(folder_path, normalized_name)
 

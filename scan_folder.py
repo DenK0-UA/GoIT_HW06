@@ -28,7 +28,7 @@ def scan_folder(folder_path):
 
             # Перевірка, до якої категорії належить файл
             for category, extensions in file_types.items():
-                if extension in extensions:
+                if extension.lower() in extensions:
                     # Нормалізація імені файлу
                     normalized_name = normalize(item.split('.')[0]) + '.' + extension
                     new_item_path = os.path.join(folder_path, normalized_name)
