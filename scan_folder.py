@@ -34,7 +34,7 @@ def scan_folder(folder_path):
                     new_item_path = os.path.join(folder_path, normalized_name)
 
                     # Перевірка, чи ім'я файлу несуперечить нормалізованому імені і чи файл не існує
-                    if item_path.lower() != new_item_path.lower():
+                    if item_path != new_item_path:
                         if os.path.exists(new_item_path):
                             added_to_category = True
                             break
@@ -66,7 +66,7 @@ def scan_folder(folder_path):
             new_item_path = os.path.join(folder_path, normalized_name)
 
             # Перевірка, чи ім'я папки несуперечить нормалізованому імені і чи папка не існує
-            if item_path.lower() != new_item_path.lower():
+            if item_path != new_item_path:
                 if os.path.exists(new_item_path):
                     continue
 

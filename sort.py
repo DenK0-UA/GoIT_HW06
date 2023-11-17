@@ -70,7 +70,7 @@ def scan_folder(folder_path):
                     normalized_name = normalize(item.split('.')[0]) + '.' + extension
                     new_item_path = os.path.join(folder_path, normalized_name)
 
-                    if item_path.lower() != new_item_path.lower():
+                    if item_path != new_item_path:
                         if os.path.exists(new_item_path):
                             added_to_category = True
                             break
@@ -95,7 +95,7 @@ def scan_folder(folder_path):
             normalized_name = normalize(item)
             new_item_path = os.path.join(folder_path, normalized_name)
 
-            if item_path.lower() != new_item_path.lower():
+            if item_path != new_item_path:
                 if os.path.exists(new_item_path):
                     continue
 
