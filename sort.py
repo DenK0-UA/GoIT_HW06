@@ -48,11 +48,11 @@ def remove_empty_folders(folder):
 
 def scan_folder(folder_path):
     file_types = {
-        'images': ['JPEG', 'PNG', 'JPG', 'SVG', 'BMP'],
-        'videos': ['AVI', 'MP4', 'MOV', 'MKV'],
-        'documents': ['DOC', 'DOCX', 'TXT', 'PDF', 'XLSX', 'PPTX'],
-        'music': ['MP3', 'OGG', 'WAV', 'AMR'],
-        'archives': ['ZIP', 'GZ', 'TAR']
+        'images': ['jpeg', 'png', 'jpg', 'svg', 'bmp'],
+        'videos': ['avi', 'mp4', 'mov', 'mkv'],
+        'documents': ['doc', 'docx', 'txt', 'pdf', 'xls', 'xlsx', 'pptx'],
+        'music': ['mp3', 'ogg', 'wav', 'amr'],
+        'archives': ['zip', 'gz', 'tar']
     }
 
     files_by_type = {category: [] for category in file_types}
@@ -62,14 +62,21 @@ def scan_folder(folder_path):
         item_path = os.path.join(folder_path, item)
 
         if os.path.isfile(item_path):
-            extension = item.split('.')[-1].upper()
+            extension = item.split('.')[-1]
             added_to_category = False
 
             for category, extensions in file_types.items():
                 if extension in extensions:
                     normalized_name = normalize(item.split('.')[0]) + '.' + extension
                     new_item_path = os.path.join(folder_path, normalized_name)
-                    os.rename(item_path, new_item_path)
+
+                    if item_path.lower() != new_item_path.lower():
+                        if os.path.exists(new_item_path):
+                            added_to_category = True
+                            break
+
+                        os.rename(item_path, new_item_path)
+
                     files_by_type[category].append(normalized_name)
                     added_to_category = True
                     break
@@ -87,7 +94,12 @@ def scan_folder(folder_path):
 
             normalized_name = normalize(item)
             new_item_path = os.path.join(folder_path, normalized_name)
-            os.rename(item_path, new_item_path)
+
+            if item_path.lower() != new_item_path.lower():
+                if os.path.exists(new_item_path):
+                    continue
+
+                os.rename(item_path, new_item_path)
 
     return files_by_type, unknown_extensions
 

@@ -1,23 +1,26 @@
-def real_len(string):
-    # Створення списку недозволених символів
-    invalid_chars = ['\n', '\f', '\r', '\t', '\v']
+import sys
 
-    # Ініціалізація лічильника
-    count = 0
+import scan_folder
+import move_files
+import remove_empty_folders
+import organize_files
 
-    # Перебір кожного символу у рядку
-    for char in string:
-        # Перевірка, чи символ не належить до недозволених символів
-        if char not in invalid_chars:
-            # У разі, якщо символ не є недозволеним, збільшуємо лічильник
-            count += 1
+def main():
+    folder_path = sys.argv[1]
+    destination_path = folder_path
+    files, unknown_extensions = scan_folder(folder_path)
 
-    # Повернення кількості символів без недозволених символів
-    return count
+    move_files(folder_path, destination_path)
+    remove_empty_folders(folder_path)
+    organize_files(files, destination_path)
+
+    print("List of files by type:")
+    for category, file_list in files.items():
+        print(f"{category}: {', '.join(file_list)}")
+
+    print("Unknown extensions:")
+    print(', '.join(unknown_extensions))
 
 
-string1 = 'Alex\nKdfe23\t\f\v.\r'
-string2 = 'Al\nKdfe23\t\v.\r'
-
-print(real_len(string1))
-print(real_len(string2))
+if __name__ == "__main__":
+    main()
