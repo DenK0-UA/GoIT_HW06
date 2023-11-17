@@ -1,9 +1,3 @@
-import os
-import re
-import shutil
-import sys
-import zipfile
-
 def scan_folder(folder_path):
     file_types = {
         'images': ['jpeg', 'png', 'jpg', 'svg', 'bmp'],
