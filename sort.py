@@ -49,10 +49,10 @@ def remove_empty_folders(folder):
 def scan_folder(folder_path):
     file_types = {
         'images': ['jpeg', 'png', 'jpg', 'svg', 'bmp', 'JPEG', 'PNG', 'JPG', 'SVG', 'BMP'],
-        'videos': ['avi', 'mp4', 'mov', 'mkv', 'AVI', 'MP4', 'MOV', 'MKV'],
+        'video': ['avi', 'mp4', 'mov', 'mkv', 'AVI', 'MP4', 'MOV', 'MKV'],
         'documents': ['doc', 'docx', 'txt', 'pdf', 'xls', 'xlsx', 'pptx', 'DOC', 'DOCX', 'TXT', 'PDF', 'XLS', 'XLSX', 'PPTX'],
-        'music': ['mp3', 'ogg', 'wav', 'amr', 'MP3', 'OGG', 'WAV', 'AMR'],
-        'archives': ['zip', 'gz', 'tar', 'ZIP', 'GZ', 'TAR']
+        'audio': ['mp3', 'ogg', 'wav', 'amr', 'MP3', 'OGG', 'WAV', 'AMR'],
+        'archives': ['zip', 'gz', 'tar', 'rar', 'ZIP', 'GZ', 'TAR', 'RAR']
     }
 
     files_by_type = {category: [] for category in file_types}
@@ -104,6 +104,16 @@ def scan_folder(folder_path):
     return files_by_type, unknown_extensions
 
 
+def move_unknown_files(unknown_files, destination_path):
+    unknown_files_path = os.path.join(destination_path, 'unknown_files')
+    os.makedirs(unknown_files_path, exist_ok=True)
+
+    for file in unknown_files:
+        file_path = os.path.join(destination_path, file)
+        new_file_path = os.path.join(unknown_files_path, file)
+        shutil.move(file_path, new_file_path)
+
+
 def organize_files(files, destination_path):
     for category, file_list in files.items():
         category_path = os.path.join(destination_path, category)
@@ -137,6 +147,8 @@ def main():
     move_files(folder_path, destination_path)
     remove_empty_folders(folder_path)
     organize_files(files, destination_path)
+    move_unknown_files(unknown_extensions, destination_path)
+
 
     print("List of files by type:")
     for category, file_list in files.items():
