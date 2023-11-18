@@ -4,7 +4,6 @@ import shutil
 import sys
 import zipfile
 
-
 def normalize(name):
     translit_dict = {
         'а': 'a', 'б': 'b', 'в': 'v', 'г': 'h', 'ґ': 'g',
@@ -40,8 +39,8 @@ def move_files(source, destination):
 
 def remove_empty_folders(folder):
     for root, dirs, files in os.walk(folder, topdown=False):
-        for dir in dirs:
-            dir_path = os.path.join(root, dir)
+        for i in dirs:
+            dir_path = os.path.join(root, i)
             if not os.listdir(dir_path):
                 os.rmdir(dir_path)
 
@@ -50,7 +49,8 @@ def scan_folder(folder_path):
     file_types = {
         'images': ['jpeg', 'png', 'jpg', 'svg', 'bmp', 'JPEG', 'PNG', 'JPG', 'SVG', 'BMP'],
         'video': ['avi', 'mp4', 'mov', 'mkv', 'AVI', 'MP4', 'MOV', 'MKV'],
-        'documents': ['doc', 'docx', 'txt', 'pdf', 'xls', 'xlsx', 'pptx', 'DOC', 'DOCX', 'TXT', 'PDF', 'XLS', 'XLSX', 'PPTX'],
+        'documents': ['doc', 'docx', 'txt', 'pdf', 'xls', 'xlsx', 'pptx', 'DOC', 'DOCX', 'TXT', 'PDF', 'XLS', 'XLSX',
+                      'PPTX'],
         'audio': ['mp3', 'ogg', 'wav', 'amr', 'MP3', 'OGG', 'WAV', 'AMR'],
         'archives': ['zip', 'gz', 'tar', 'rar', 'ZIP', 'GZ', 'TAR', 'RAR']
     }
@@ -116,13 +116,12 @@ def move_unknown_files(unknown_files, destination_path):
 
 def organize_files(files, destination_path):
     for category, file_list in files.items():
-        category_path = os.path.join(destination_path, category)
-        os.makedirs(category_path, exist_ok=True)
+        if category == 'archives':
+            category_path = os.path.join(destination_path, category)
+            os.makedirs(category_path, exist_ok=True)
 
-        for file in file_list:
-            file_path = os.path.join(destination_path, file)
-
-            if category == 'archives':
+            for file in file_list:
+                file_path = os.path.join(destination_path, file)
                 archive_name = os.path.splitext(file)[0]
                 archive_path = os.path.join(category_path, archive_name)
                 os.makedirs(archive_path, exist_ok=True)
@@ -134,9 +133,17 @@ def organize_files(files, destination_path):
                 else:
                     print(f"Unsupported archive format: {file}")
 
-            else:
+        elif category in ['video', 'audio', 'documents', 'images']:
+            category_path = os.path.join(destination_path, category)
+            os.makedirs(category_path, exist_ok=True)
+
+            for file in file_list:
+                file_path = os.path.join(destination_path, file)
                 new_file_path = os.path.join(category_path, file)
                 shutil.move(file_path, new_file_path)
+
+        else:
+            print(f"Unknown category: {category}")
 
 
 def main():
@@ -148,7 +155,6 @@ def main():
     remove_empty_folders(folder_path)
     organize_files(files, destination_path)
     move_unknown_files(unknown_extensions, destination_path)
-
 
     print("List of files by type:")
     for category, file_list in files.items():
