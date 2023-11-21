@@ -1,5 +1,5 @@
 # Імпорт функції scan_folder зі сканованого файлу
-from scan_folder import scan_folder
+from sort import scan_folder
 
 # Шлях до тестової папки
 test_folder_path = 'C:/Users/denid/Desktop/test_garbage_folder_etalon'
